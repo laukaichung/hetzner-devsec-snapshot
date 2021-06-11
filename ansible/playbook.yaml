@@ -1,0 +1,33 @@
+---
+# If you do not run apt upgrade first, you will get this error in OS hardening script:
+# https://github.com/dev-sec/ansible-collection-hardening/issues/222
+- hosts: default
+  become: true
+  tasks:
+    - name: Update and upgrade apt packages
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #One day
+
+- name: 'Build a hardening image'
+  hosts: default
+  become: true
+  collections:
+    - devsec.hardening
+  roles:
+    - os_hardening
+  vars:
+    # os_env_umask is set to 027 by default,
+    # which breaks many Docker images that assume umask is 022.
+    # https://github.com/dev-sec/ansible-collection-hardening/issues/177#issuecomment-627935728
+    #
+    # When you download the docker and k8s GPG keys `sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg`,
+    # if the default permission is 027 (640), it would throw `GPG keys error NO_PUBKEY`
+    # because the apt system doesn't have the permission to read the file `/usr/share/keyrings/kubernetes-archive-keyring.gpg`
+    # You can run `ls -la /usr/share/keyrings/` to check out the default file permission for built-in GPG keys.
+    os_env_umask: '022'
+    sysctl_overwrite:
+      # Enable IPv4 traffic forwarding.
+      net.ipv4.ip_forward: 1
+      net.ipv6.conf.all.forwarding: 1

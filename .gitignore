@@ -1,0 +1,7 @@
+# Cache objects
+packer_cache/
+# Crash log
+crash.log
+*.pkrvars.hcl
+# For built boxes
+*.box
