@@ -11,11 +11,6 @@ EOF
   }
 }
 
-variable "root_user"{
-  type      = string
-  default   = "lkc"
-}
-
 variable "server_location"{
   type    = string
   default = "hel1"
