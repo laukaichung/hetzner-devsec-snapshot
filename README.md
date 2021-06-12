@@ -14,7 +14,5 @@ inputs.auto.pkvars.hcl:
 ````
 hcloud_token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ````
-2. Simply run `packer build .` to build the image. It should take about half an hour. Be patient. 
-   You don't even need to manually install the devsec.hardening collection from `Ansible Galaxy`. Packer will do it for you based on the `./ansible/requirements.yaml` file.
-
-
+2. Simply run `packer build .` to build the image. You don't even need to manually install the devsec.hardening collection from `Ansible Galaxy`. Packer will do it for you based on the `./ansible/requirements.yaml` file.
+   The entire process should take about half an hour. Be patient.
